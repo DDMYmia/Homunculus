@@ -1,21 +1,21 @@
-// 语言类型
+// Language type
 export type Language = 'en' | 'zh';
 
-// 翻译内容类型
+// Translations interface
 export interface Translations {
-  // 导航栏
+  // Navigation bar
   appName: string;
   enterApp: string;
   themeSettings: string;
   
-  // 英雄区
+  // Hero section
   heroTitle: string;
   heroSubtitle: string;
   heroDescription: string;
   getStarted: string;
   learnMore: string;
   
-  // 特点区域
+  // Features section
   featuresTitle: string;
   featuresSubtitle: string;
   featureIntegration: {
@@ -35,7 +35,57 @@ export interface Translations {
     description: string;
   };
   
-  // 关于我们
+  // Showcase section
+  showcaseTitle?: string;
+  showcaseSubtitle?: string;
+  showcaseTitle1?: string;
+  showcaseDesc1?: string;
+  showcaseTitle2?: string;
+  showcaseDesc2?: string;
+  showcaseTitle3?: string;
+  showcaseDesc3?: string;
+  showcaseTitle4?: string;
+  showcaseDesc4?: string;
+  
+  // App download section
+  downloadTitle?: string;
+  downloadSubtitle?: string;
+  windowsClient?: string;
+  windowsDesc?: string;
+  iosApp?: string;
+  iosDesc?: string;
+  androidApp?: string;
+  androidDesc?: string;
+  comingSoon?: string;
+  comingToAppStore?: string;
+  comingToGooglePlay?: string;
+  
+  // Footer navigation
+  companyTitle?: string;
+  aboutUs?: string;
+  contactUs?: string;
+  newsCenter?: string;
+  careers?: string;
+  
+  productTitle?: string;
+  changelog?: string;
+  roadmap?: string;
+  apiDocs?: string;
+  helpCenter?: string;
+  
+  communityTitle?: string;
+  community?: string;
+  devForum?: string;
+  discord?: string;
+  techBlog?: string;
+  
+  legalTitle?: string;
+  legal?: string;
+  terms?: string;
+  privacy?: string;
+  disclaimer?: string;
+  
+  // About us
   aboutTitle: string;
   aboutSubtitle: string;
   aboutContent1: string;
@@ -43,10 +93,10 @@ export interface Translations {
   aboutContent3: string;
   tryNow: string;
   
-  // 页脚
+  // Footer
   footerText: string;
   
-  // 配色方案
+  // Color schemes
   colorSchemes: {
     default: string;
     deepOcean: string;
@@ -54,11 +104,11 @@ export interface Translations {
     earth: string;
   };
   
-  // 版本信息
+  // Version information
   version: string;
   versionFeatures: string[];
   
-  // 仪表盘
+  // Dashboard
   dashboard: string;
   home: string;
   totalAssets: string;
@@ -69,7 +119,7 @@ export interface Translations {
   recentTrades: string;
   tradeDistribution: string;
   
-  // 导航菜单
+  // Navigation menu
   mainFeatures: string;
   dataAnalysis: string;
   trades: string;
@@ -81,41 +131,91 @@ export interface Translations {
   userCenter: string;
 }
 
-// 英文翻译
+// English translation
 export const en: Translations = {
-  // 导航栏
+  // Navigation bar
   appName: 'Homunculus',
   enterApp: 'Enter App',
   themeSettings: 'Theme Settings',
   
-  // 英雄区
-  heroTitle: 'Homunculus',
-  heroSubtitle: 'Next-Generation Cryptocurrency Trading Analytics Platform',
-  heroDescription: 'Integrate data from multiple exchanges, providing comprehensive trading analysis tools to help you optimize trading strategies and improve profitability. Whether you\'re a beginner or an experienced trader, Homunculus provides data-driven trading insights.',
+  // Hero section
+  heroTitle: 'Homunculus - Intelligent Trading Analysis',
+  heroSubtitle: 'Data-Driven Trading Decisions',
+  heroDescription: 'Homunculus is an advanced analytics tool designed for cryptocurrency traders to analyze trading history, identify patterns, optimize strategies, and achieve better trading results.',
   getStarted: 'Get Started',
   learnMore: 'Learn More',
   
-  // 特点区域
-  featuresTitle: 'Platform Features',
-  featuresSubtitle: 'Homunculus provides comprehensive trading analysis tools to help you understand your trading performance and optimize your strategies.',
+  // Features section
+  featuresTitle: 'Four Core Advantages',
+  featuresSubtitle: 'Enhance Your Trading Analysis Capabilities',
   featureIntegration: {
-    title: 'Multi-Exchange Integration',
-    description: 'Support for major cryptocurrency exchanges including Binance, OKX, Bybit, Bitget, etc., easily import and synchronize your trading data.',
+    title: 'Extensive Data Sources',
+    description: 'Support for multiple exchange data import, providing a comprehensive trading view and easy management of multi-platform assets.'
   },
   featureAnalysis: {
-    title: 'Advanced Data Analysis',
-    description: 'Gain deep insights into your trading performance through win rate analysis, trade duration analysis, maximum drawdown analysis, and more.',
+    title: 'Complex Trading Analysis',
+    description: 'In-depth analysis of each trade\'s performance, understanding profit and loss reasons, and finding the best entry and exit points.'
   },
   featureVisualization: {
     title: 'Elegant Data Visualization',
-    description: 'Use professional charting tools to transform complex trading data into intuitive visual presentations.',
+    description: 'Intuitive charts displaying trading history and performance metrics, helping you quickly grasp trends and patterns.'
   },
   featureJournal: {
-    title: 'Detailed Trade Journal',
-    description: 'Record detailed information for each trade, supporting rich text notes, tag categorization, and image attachments for review and learning.',
+    title: 'Detailed Trading Records',
+    description: 'Record and review the thinking process for each trade, build your personal trading system, and continuously optimize your strategy.'
   },
   
-  // 关于我们
+  // Showcase section
+  showcaseTitle: 'Feature Showcase',
+  showcaseSubtitle: 'Explore the powerful features of Homunculus',
+  showcaseTitle1: 'Trading Analysis Features',
+  showcaseDesc1: 'Powerful trading data analysis tools to help you understand market trends and patterns',
+  showcaseTitle2: 'Real-time Data Demo',
+  showcaseDesc2: 'Providing real-time market data to ensure your decisions are based on the latest information',
+  showcaseTitle3: 'User Testimonials',
+  showcaseDesc3: 'Real experiences and success stories from traders around the world',
+  showcaseTitle4: 'Data Security Guarantee',
+  showcaseDesc4: 'Using the highest level of encryption technology to ensure your trading data is secure',
+  
+  // App download section
+  downloadTitle: 'Download Homunculus App',
+  downloadSubtitle: 'App download feature coming soon. You\'ll be able to use our trading analysis tools on various devices.',
+  windowsClient: 'Windows Client',
+  windowsDesc: 'For Windows 10 and above',
+  iosApp: 'iOS App',
+  iosDesc: 'For iPhone and iPad',
+  androidApp: 'Android App',
+  androidDesc: 'For all Android devices',
+  comingSoon: 'Coming Soon',
+  comingToAppStore: 'Coming to App Store',
+  comingToGooglePlay: 'Coming to Google Play',
+  
+  // Footer navigation
+  companyTitle: 'Company',
+  aboutUs: 'About Us',
+  contactUs: 'Contact Us',
+  newsCenter: 'News Center',
+  careers: 'Join Us',
+  
+  productTitle: 'Product',
+  changelog: 'Changelog',
+  roadmap: 'Roadmap',
+  apiDocs: 'API Documentation',
+  helpCenter: 'Help Center',
+  
+  communityTitle: 'Community',
+  community: 'Community',
+  devForum: 'Developer Forum',
+  discord: 'Discord',
+  techBlog: 'Tech Blog',
+  
+  legalTitle: 'Legal',
+  legal: 'Legal',
+  terms: 'Terms of Service',
+  privacy: 'Privacy Policy',
+  disclaimer: 'Disclaimer',
+  
+  // About us
   aboutTitle: 'About Us',
   aboutSubtitle: 'We are a group of developers passionate about cryptocurrency and data analysis, dedicated to providing traders with the best analytical tools.',
   aboutContent1: 'The core philosophy of the Homunculus platform is "Data-driven trading, insights into market opportunities." We believe that through in-depth analysis of trading data, traders can discover their trading patterns and regularities, thereby optimizing trading strategies and improving profitability.',
@@ -123,10 +223,10 @@ export const en: Translations = {
   aboutContent3: 'The security design of the platform is noteworthy. We only use read-only API access to exchange data or CSV documents exported from exchanges, ensuring user fund security while providing comprehensive analytical capabilities. We do not sell user data or profit from it in any way.',
   tryNow: 'Try Now',
   
-  // 页脚
+  // Footer
   footerText: '© 2025 Homunculus.com - Empowering Data-Driven Traders',
   
-  // 配色方案
+  // Color schemes
   colorSchemes: {
     default: 'Default Blue',
     deepOcean: 'Deep Ocean Dawn',
@@ -134,16 +234,17 @@ export const en: Translations = {
     earth: 'Earth Tones',
   },
   
-  // 版本信息
+  // Version information
   version: 'Version',
   versionFeatures: [
-    'Added three new color schemes: Deep Ocean Dawn, Earth Forest, Earth Tones',
-    'Improved button styles and interaction effects',
-    'Optimized page layout and responsive design',
-    'Added color scheme selection feature',
+    'Enhanced theme system with 9 color schemes',
+    'Improved UI design and interactive components',
+    'Added font customization options',
+    'Optimized dashboard layout and cards',
+    'Fixed theme-related rendering issues'
   ],
   
-  // 仪表盘
+  // Dashboard
   dashboard: 'Dashboard',
   home: 'Home',
   totalAssets: 'Total Assets',
@@ -154,7 +255,7 @@ export const en: Translations = {
   recentTrades: 'Recent Trades',
   tradeDistribution: 'Trade Distribution',
   
-  // 导航菜单
+  // Navigation menu
   mainFeatures: 'Main Features',
   dataAnalysis: 'Data Analysis',
   trades: 'Trades',
@@ -166,41 +267,91 @@ export const en: Translations = {
   userCenter: 'User Center',
 };
 
-// 中文翻译
+// Chinese translation
 export const zh: Translations = {
-  // 导航栏
+  // Navigation bar
   appName: 'Homunculus',
   enterApp: '进入应用',
   themeSettings: '主题设置',
   
-  // 英雄区
-  heroTitle: 'Homunculus',
-  heroSubtitle: '新一代加密货币交易分析平台',
-  heroDescription: '整合多交易所数据，提供全面的交易分析工具，帮助您优化交易策略，提高盈利能力。无论您是初学者还是经验丰富的交易者，Homunculus 都能为您提供数据驱动的交易洞察。',
+  // Hero section
+  heroTitle: 'Homunculus - 智能交易分析',
+  heroSubtitle: '为您的交易决策提供数据支持',
+  heroDescription: 'Homunculus 是一款专为加密货币交易者打造的高级分析工具，帮助您分析交易历史、识别模式、优化策略，实现更好的交易结果。',
   getStarted: '开始使用',
   learnMore: '了解更多',
   
-  // 特点区域
-  featuresTitle: '平台特点',
-  featuresSubtitle: 'Homunculus 提供全面的交易分析工具，帮助您深入了解交易表现，优化交易策略。',
+  // Features section
+  featuresTitle: '四大核心优势',
+  featuresSubtitle: '全方位提升您的交易分析能力',
   featureIntegration: {
-    title: '多交易所集成',
-    description: '支持币安、OKX、Bybit、Bitget等主要加密货币交易所，轻松导入和同步您的交易数据。',
+    title: '广泛数据源',
+    description: '支持多家交易所数据导入，提供全面的交易视图，轻松管理多平台资产。'
   },
   featureAnalysis: {
-    title: '高级数据分析',
-    description: '通过胜率分析、交易时长分析、最大回撤分析等工具，深入了解您的交易表现。',
+    title: '复杂交易分析',
+    description: '深入分析每笔交易的表现，了解盈亏原因，找出最佳入场点和出场点。'
   },
   featureVisualization: {
     title: '优雅数据可视化',
-    description: '使用专业的图表工具，将复杂的交易数据转化为直观易懂的视觉呈现。',
+    description: '通过直观的图表展示交易历史和绩效指标，助您快速把握趋势和模式。'
   },
   featureJournal: {
-    title: '详细交易日志',
-    description: '记录每笔交易的详细信息，支持富文本笔记、标签分类和图片附件，便于复盘和学习。',
+    title: '详细交易记录',
+    description: '记录和回顾每笔交易的思考过程，打造个人交易系统，不断优化您的策略。'
   },
   
-  // 关于我们
+  // Showcase section
+  showcaseTitle: '功能展示',
+  showcaseSubtitle: '探索 Homunculus 的强大功能和特性',
+  showcaseTitle1: '交易分析功能',
+  showcaseDesc1: '强大的交易数据分析工具，帮助您洞察市场趋势和模式',
+  showcaseTitle2: '实时数据演示',
+  showcaseDesc2: '提供实时市场数据，确保您的决策基于最新信息',
+  showcaseTitle3: '用户见证',
+  showcaseDesc3: '来自全球交易者的真实体验和成功案例分享',
+  showcaseTitle4: '数据安全保障',
+  showcaseDesc4: '采用最高级别的加密技术，确保您的交易数据安全',
+  
+  // App download section
+  downloadTitle: '下载 Homunculus 应用',
+  downloadSubtitle: '应用下载功能即将推出，敬请期待。您将能够在各种设备上使用我们的交易分析工具。',
+  windowsClient: 'Windows 客户端',
+  windowsDesc: '适用于 Windows 10 及以上版本',
+  iosApp: 'iOS App',
+  iosDesc: '适用于 iPhone 和 iPad',
+  androidApp: 'Android App',
+  androidDesc: '适用于所有 Android 设备',
+  comingSoon: '即将推出',
+  comingToAppStore: '即将上架 App Store',
+  comingToGooglePlay: '即将上架 Google Play',
+  
+  // Footer navigation
+  companyTitle: '公司',
+  aboutUs: '关于我们',
+  contactUs: '联系方式',
+  newsCenter: '新闻中心',
+  careers: '加入我们',
+  
+  productTitle: '产品',
+  changelog: '更新日志',
+  roadmap: '路线图',
+  apiDocs: 'API 文档',
+  helpCenter: '帮助中心',
+  
+  communityTitle: '社区',
+  community: '社区',
+  devForum: '开发者论坛',
+  discord: 'Discord',
+  techBlog: '技术博客',
+  
+  legalTitle: '法律',
+  legal: '法律',
+  terms: '服务条款',
+  privacy: '隐私政策',
+  disclaimer: '免责声明',
+  
+  // About us
   aboutTitle: '关于我们',
   aboutSubtitle: '我们是一群热爱加密货币和数据分析的开发者，致力于为交易者提供最好的分析工具。',
   aboutContent1: 'Homunculus 平台的核心理念是"数据驱动交易，洞察市场先机"。我们相信，通过深入分析交易数据，交易者可以发现自己的交易模式和规律，从而优化交易策略，提高盈利能力。',
@@ -208,10 +359,10 @@ export const zh: Translations = {
   aboutContent3: '平台的安全设计值得注意，我们仅使用只读 API 访问交易所数据或交易所导出的 CSV 文档，确保用户资金安全的同时提供全面的分析能力。我们不会出售用户数据或以任何方式从中获利。',
   tryNow: '立即体验',
   
-  // 页脚
+  // Footer
   footerText: '© 2025 Homunculus.com - 赋能数据驱动的交易者',
   
-  // 配色方案
+  // Color schemes
   colorSchemes: {
     default: '默认蓝色',
     deepOcean: '深海晨光',
@@ -219,16 +370,17 @@ export const zh: Translations = {
     earth: '大地色系',
   },
   
-  // 版本信息
+  // Version information
   version: '版本',
   versionFeatures: [
-    '新增三种配色方案：深海晨光、大地森林、大地色系',
-    '改进按钮样式和交互效果',
-    '优化页面布局和响应式设计',
-    '添加配色方案选择功能',
+    'Enhanced theme system with 9 color schemes',
+    'Improved UI design and interactive components',
+    'Added font customization options',
+    'Optimized dashboard layout and cards',
+    'Fixed theme-related rendering issues'
   ],
   
-  // 仪表盘
+  // Dashboard
   dashboard: '仪表盘',
   home: '首页',
   totalAssets: '总资产',
@@ -239,7 +391,7 @@ export const zh: Translations = {
   recentTrades: '最近交易',
   tradeDistribution: '交易分布',
   
-  // 导航菜单
+  // Navigation menu
   mainFeatures: '主要功能',
   dataAnalysis: '数据分析',
   trades: '交易记录',
@@ -251,7 +403,7 @@ export const zh: Translations = {
   userCenter: '用户中心',
 };
 
-// 获取翻译
+// Get translations
 export const getTranslations = (language: Language): Translations => {
   return language === 'en' ? en : zh;
 }; 

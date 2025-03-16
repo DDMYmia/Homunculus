@@ -12,6 +12,7 @@
 
 - [Introduction](#-introduction)
 - [Key Features](#-key-features)
+- [Changelog](#-changelog)
 - [Getting Started](#-getting-started)
 - [User Guide](#-user-guide)
 - [Technical Architecture](#-technical-architecture)
@@ -33,6 +34,33 @@ The platform helps traders consolidate data from multiple exchanges, integrating
 Whether you're a beginner seeking breakthrough insights or an experienced trader looking to optimize your strategy, Homunculus provides multi-dimensional key information to help you find your unique edge in the market.
 
 > 💡 **Core Value**: Integration, Analysis, Optimization — Build every trade on a foundation of data.
+
+## 📝 Changelog
+
+### Version 0.1.1 (March 16, 2024)
+- **Enhanced Theme System**:
+  - Added global CSS variable-based theme system
+  - Implemented 9 distinctive color schemes
+  - Fixed theme-related rendering issues
+- **UI Improvements**:
+  - Redesigned theme selection interface
+  - Added font customization options
+  - Implemented border radius and animation settings
+- **Dashboard Enhancements**:
+  - Improved responsive layout for all screen sizes
+  - Added new card components with interactive animations
+  - Fixed icon display and alignment issues
+- **Code Optimizations**:
+  - Reorganized component structure
+  - Improved code documentation
+  - Enhanced theme provider architecture
+
+### Version 0.1.0 (March 15, 2024)
+- Initial alpha release
+- Basic dashboard functionality
+- Trading data visualization
+- Multi-language support (English, Chinese)
+- Three color schemes
 
 ## ✨ Key Features
 

@@ -33,6 +33,29 @@
   --color-rust: #BB3E03;
   --color-brick: #AE2012;
   --color-deepred: #9B2226;
+
+  /* 添加CSS变量以支持主题设置 */
+  --font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  --font-size-base: 16px;
+  --font-weight-normal: 400;
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+  
+  /* 全局颜色映射 */
+  --color-primary: #1976d2;
+  --color-secondary: #90caf9;
+  --color-accent: #2196F3;
+  --color-background: #121212;
+  --color-paper: #1e1e1e;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  --color-button-gradient: linear-gradient(45deg, #2196F3 30%, #21CBF3 90%);
+  --color-button-hover-gradient: linear-gradient(45deg, #1976D2 30%, #00B0FF 90%);
+  --color-hero-gradient: radial-gradient(circle at 50% 50%, #303f9f 0%, #1a237e 50%, #121212 100%);
+  --color-success: #4caf50;
+  --color-error: #f44336;
+  --color-warning: #ff9800;
+  --color-info: #2196f3;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,7 +75,10 @@ body {
     )
     rgb(var(--background-start-rgb));
   margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  transition: all var(--transition-speed) ease;
 }
 
 /* 自定义颜色类 | Custom Color Classes */
@@ -70,6 +96,16 @@ body {
 
 .text-deepsea {
   color: var(--color-deepsea);
+}
+
+/* 页脚链接样式 | Footer Link Styles */
+.footer-link {
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #90caf9 !important; /* 使用 primary 颜色 */
+  text-decoration: underline !important;
 }
 
 /* 卡片样式 | Card Styles */
@@ -130,4 +166,299 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* 高对比度模式 */
+.high-contrast {
+  --contrast-ratio: 1.6;
+}
+
+/* 密度设置 */
+[data-density='compact'] .MuiToolbar-root,
+[data-density='compact'] .MuiTableCell-root,
+[data-density='compact'] .MuiMenuItem-root {
+  padding: 4px 8px !important;
+  min-height: unset !important;
+}
+
+[data-density='comfortable'] .MuiToolbar-root,
+[data-density='comfortable'] .MuiTableCell-root,
+[data-density='comfortable'] .MuiMenuItem-root {
+  padding: 12px 24px !important;
+}
+
+button, 
+a, 
+input, 
+select, 
+.MuiButton-root, 
+.MuiPaper-root, 
+.MuiCard-root {
+  border-radius: var(--border-radius) !important;
+  transition: all var(--transition-speed) ease !important;
+}
+
+html[data-theme="grayscale"] {
+  --color-primary: #1976d2;
+  --color-secondary: #90caf9;
+  --color-accent: #2196F3;
+  --color-background: #121212;
+  --color-paper: #1e1e1e;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  --color-success: #4caf50;
+  --color-error: #f44336;
+  --color-warning: #ff9800;
+  --color-info: #2196f3;
+}
+
+html[data-theme="fruitPlatter"] {
+  --color-primary: #FF5A5F;
+  --color-secondary: #FFD166;
+  --color-accent: #06D6A0;
+  --color-background: #073B4C;
+  --color-paper: #114B5F;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+}
+
+html[data-theme="neonCyberpunk"] {
+  --color-primary: #00FFFF;
+  --color-secondary: #FF00FF;
+  --color-accent: #00FF00;
+  --color-background: #0D001A;
+  --color-paper: #150025;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+  --color-button-gradient: linear-gradient(45deg, #00FFFF 30%, #FF00FF 90%);
+  --color-button-hover-gradient: linear-gradient(45deg, #00CCCC 30%, #CC00CC 90%);
+  --color-hero-gradient: radial-gradient(circle at 50% 50%, #150025 0%, #0D001A 50%, #000000 100%);
+}
+
+html[data-theme="byzantine"] {
+  --color-primary: #B33771;
+  --color-secondary: #FEA47F;
+  --color-accent: #6D214F;
+  --color-background: #2C2C54;
+  --color-paper: #40407A;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+}
+
+html[data-theme="estonian"] {
+  --color-primary: #3498DB;
+  --color-secondary: #F0F0F0;
+  --color-accent: #000000;
+  --color-background: #F0F0F0;
+  --color-paper: #FFFFFF;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: rgba(26, 26, 26, 0.7);
+}
+
+html[data-theme="earthPulse"] {
+  --color-primary: #3B7A57;
+  --color-secondary: #5F9EA0;
+  --color-accent: #DAA520;
+  --color-background: #2F4F4F;
+  --color-paper: #3D5B59;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+}
+
+html[data-theme="primalForest"] {
+  --color-primary: #656D4A;
+  --color-secondary: #A4AC86;
+  --color-accent: #7F4F24;
+  --color-background: #333D29;
+  --color-paper: #414833;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  --color-button-gradient: linear-gradient(45deg, #656D4A 30%, #A4AC86 90%);
+  --color-button-hover-gradient: linear-gradient(45deg, #414833 30%, #656D4A 90%);
+  --color-hero-gradient: radial-gradient(circle at 50% 50%, #414833 0%, #333D29 50%, #582F0E 100%);
+}
+
+html[data-theme="german"] {
+  --color-primary: #DD0000;
+  --color-secondary: #FFCE00;
+  --color-accent: #000000;
+  --color-background: #333333;
+  --color-paper: #444444;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+}
+
+html[data-theme="blueOrange"] {
+  --color-primary: #0074D9;
+  --color-secondary: #FF851B;
+  --color-accent: #01FF70;
+  --color-background: #111111;
+  --color-paper: #222222;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+}
+
+/* 密度设置 */
+html[data-density="compact"] {
+  --spacing-unit: 0.75;
+}
+
+html[data-density="normal"] {
+  --spacing-unit: 1;
+}
+
+html[data-density="comfortable"] {
+  --spacing-unit: 1.25;
+}
+
+/* 高对比度模式 */
+html.high-contrast {
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.9);
+  filter: contrast(1.2);
+}
+
+/* 应用全局基础样式 */
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  margin: 0;
+  padding: 0;
+  transition: all var(--transition-speed) ease;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+}
+
+/* 应用圆角到通用元素 */
+button, 
+.MuiButton-root,
+.MuiCard-root,
+.MuiPaper-root,
+.MuiChip-root,
+input, 
+select, 
+textarea {
+  border-radius: var(--border-radius) !important;
+  transition: all var(--transition-speed) ease !important;
+}
+
+/* 统一链接效果 */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+}
+
+/* 页脚链接样式 */
+.footer-link {
+  position: relative;
+  transition: color var(--transition-speed) ease !important;
+}
+
+.footer-link:hover {
+  color: var(--color-primary) !important;
+}
+
+.footer-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--color-primary);
+  transition: width var(--transition-speed) ease;
+}
+
+.footer-link:hover::after {
+  width: 100%;
+}
+
+/* 响应式主题设置 - 表格样式 */
+.theme-table th,
+.theme-table td {
+  padding: calc(8px * var(--spacing-unit));
+  font-size: calc(var(--font-size-base) * 0.875);
+}
+
+/* MUI组件样式覆盖 */
+.MuiButton-containedPrimary {
+  background: var(--color-primary) !important;
+}
+
+.MuiButton-containedSecondary {
+  background: var(--color-secondary) !important;
+}
+
+.MuiIconButton-root {
+  transition: transform var(--transition-speed) ease !important;
+}
+
+.MuiIconButton-root:hover {
+  transform: scale(1.05);
+}
+
+/* 主题预览卡片 */
+.theme-preview-card {
+  cursor: pointer;
+  transition: transform var(--transition-speed) ease, 
+              box-shadow var(--transition-speed) ease;
+}
+
+.theme-preview-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* 动画效果 */
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-speed) ease;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
 } 

@@ -148,23 +148,148 @@
 
 ### 1. 落地页
 
-#### ✅ 三屏结构
+#### ✅ 五屏结构
 
 使用 Framer Motion + Intersection Observer 实现滚动信息展示，顶部导航栏固定在顶部。
 
-##### 英雄区
+##### 第一屏：英雄区（Hero Section）
 - 标题："Homunculus - 智能交易分析"
 - 副标题：平台核心价值简介
 - CTA 按钮（"开始使用" / "立即体验"）
 - 背景动画（粒子、渐变、流动效果）
 
-##### 第二屏：四大主要特点：
+##### 第二屏：四大主要特点
 - 广泛数据源、复杂交易分析、优雅数据可视化、详细交易记录
 - 基于卡片的展示，配合交互动画（悬停展开内容）
 - 行动召唤（CTA）
 
-##### 第三屏：
-- 关于我们、联系方式
+##### 第三屏：功能展示
+- 交易分析功能展示
+- 实时数据演示
+- 用户见证和评价
+- 数据安全保障
+
+##### 第四屏：应用下载（未启用）
+- Windows 客户端下载（灰显按钮）
+- iOS App Store（灰显按钮）
+- Android Google Play（灰显按钮）
+- 下载区域提示文字："应用下载功能即将推出"
+
+##### 第五屏：页脚导航
+###### 公司信息
+- 关于我们
+- 联系方式
+- 新闻中心
+- 加入我们
+
+###### 产品
+- Changelog（更新日志）
+- 路线图
+- API 文档
+- 帮助中心
+
+###### 社区
+- Community（社区）
+- 开发者论坛
+- Discord 频道
+- 技术博客
+
+###### 法律
+- Legal（法律）
+- 服务条款
+- 隐私政策
+- 免责声明
+
+###### 社交媒体链接
+- Facebook（链接待定）
+- Twitter/X（链接待定）
+- Instagram（链接待定）
+- LinkedIn（链接待定）
+- YouTube（链接待定）
+
+#### ✅ 页脚实现
+
+```tsx
+const Footer = () => {
+  return (
+    <footer className="bg-gray-900 text-white py-12">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* 公司信息 */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">公司</h3>
+            <ul className="space-y-2">
+              <li><a href="/about">关于我们</a></li>
+              <li><a href="/contact">联系方式</a></li>
+              <li><a href="/news">新闻中心</a></li>
+              <li><a href="/careers">加入我们</a></li>
+            </ul>
+          </div>
+          
+          {/* 产品 */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">产品</h3>
+            <ul className="space-y-2">
+              <li><a href="/changelog">更新日志</a></li>
+              <li><a href="/roadmap">路线图</a></li>
+              <li><a href="/api">API 文档</a></li>
+              <li><a href="/help">帮助中心</a></li>
+            </ul>
+          </div>
+
+          {/* 社区 */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">社区</h3>
+            <ul className="space-y-2">
+              <li><a href="/community">社区</a></li>
+              <li><a href="/forum">开发者论坛</a></li>
+              <li><a href="/discord">Discord</a></li>
+              <li><a href="/blog">技术博客</a></li>
+            </ul>
+          </div>
+
+          {/* 法律 */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">法律</h3>
+            <ul className="space-y-2">
+              <li><a href="/legal">法律</a></li>
+              <li><a href="/terms">服务条款</a></li>
+              <li><a href="/privacy">隐私政策</a></li>
+              <li><a href="/disclaimer">免责声明</a></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* 社交媒体链接 */}
+        <div className="mt-8 pt-8 border-t border-gray-800">
+          <div className="flex justify-center space-x-6">
+            <a href="#" className="text-gray-400 hover:text-white">
+              <span className="sr-only">Facebook</span>
+              <FacebookIcon />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <span className="sr-only">Twitter</span>
+              <TwitterIcon />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <span className="sr-only">Instagram</span>
+              <InstagramIcon />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <span className="sr-only">LinkedIn</span>
+              <LinkedInIcon />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white">
+              <span className="sr-only">YouTube</span>
+              <YouTubeIcon />
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+```
 
 ### 2. 交易仪表盘
 

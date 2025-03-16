@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
@@ -16,8 +15,8 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PaletteIcon from '@mui/icons-material/Palette';
 import LanguageIcon from '@mui/icons-material/Language';
+import Timeline from '@mui/icons-material/Timeline';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -36,106 +35,20 @@ import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Fade from '@mui/material/Fade';
 import Chip from '@mui/material/Chip';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import { Language, Translations, getTranslations } from '../utils/i18n';
+import ThemeButton from './ThemeButton';
+import { useTheme as useCustomTheme } from '@/styles/themes/ThemeProvider';
 
-// 配色方案类型
-type ColorScheme = 'default' | 'deepOcean' | 'earthForest' | 'earth';
+// Version information
+const VERSION = '0.1.1';
 
-// 版本信息
-const VERSION = '0.1.0';
-
-// 创建主题
-const getTheme = (colorScheme: ColorScheme = 'default') => {
-  // 默认配色
-  let primaryColor = '#1976d2';
-  let secondaryColor = '#90caf9';
-  let accentColor = '#2196F3';
-  let backgroundColor = '#121212';
-  let paperColor = '#1e1e1e';
-  let textPrimaryColor = '#ffffff';
-  let textSecondaryColor = 'rgba(255, 255, 255, 0.7)';
-  
-  // 深海晨光配色
-  if (colorScheme === 'deepOcean') {
-    primaryColor = '#2c698d';
-    secondaryColor = '#bae8e8';
-    accentColor = '#3a8daa';
-    backgroundColor = '#272643';
-    paperColor = '#1e1e38';
-    textPrimaryColor = '#ffffff';
-    textSecondaryColor = 'rgba(255, 255, 255, 0.7)';
-  }
-  
-  // 大地森林配色
-  else if (colorScheme === 'earthForest') {
-    primaryColor = '#656D4A';
-    secondaryColor = '#A4AC86';
-    accentColor = '#7F4F24';
-    backgroundColor = '#333D29';
-    paperColor = '#414833';
-    textPrimaryColor = '#ffffff';
-    textSecondaryColor = 'rgba(255, 255, 255, 0.7)';
-  }
-  
-  // 大地配色
-  else if (colorScheme === 'earth') {
-    primaryColor = '#005F73';
-    secondaryColor = '#0A9396';
-    accentColor = '#EE9B00';
-    backgroundColor = '#001219';
-    paperColor = '#005F73';
-    textPrimaryColor = '#ffffff';
-    textSecondaryColor = 'rgba(255, 255, 255, 0.7)';
-  }
-
-  return createTheme({
-    palette: {
-      mode: 'dark',
-      primary: {
-        main: primaryColor,
-        light: secondaryColor,
-        dark: accentColor,
-      },
-      secondary: {
-        main: secondaryColor,
-      },
-      background: {
-        default: backgroundColor,
-        paper: paperColor,
-      },
-      text: {
-        primary: textPrimaryColor,
-        secondary: textSecondaryColor,
-      },
-    },
-  });
-};
-
-// 配色方案名称映射
-const getColorSchemeNames = (t: Translations) => ({
-  default: t.colorSchemes.default,
-  deepOcean: t.colorSchemes.deepOcean,
-  earthForest: t.colorSchemes.earthForest,
-  earth: t.colorSchemes.earth,
-});
-
-// 获取导航菜单
+// Get localized navigation items
 const getNavigation = (t: Translations) => [
-  { kind: 'header', title: t.mainFeatures },
   { segment: 'dashboard', title: t.dashboard, icon: <DashboardIcon /> },
-  { segment: 'trades', title: t.trades, icon: <ShoppingCartIcon /> },
-  { kind: 'divider' },
-  { kind: 'header', title: t.dataAnalysis },
-  {
-    segment: 'analytics',
-    title: t.dataAnalysis,
-    icon: <BarChartIcon />,
-    children: [
-      { segment: 'profit-loss', title: t.profitLossAnalysis, icon: <DescriptionIcon /> },
-      { segment: 'win-rate', title: t.winRateAnalysis, icon: <DescriptionIcon /> },
-      { segment: 'max-drawdown', title: t.maxDrawdown, icon: <DescriptionIcon /> },
-    ],
-  },
+  { segment: 'portfolio', title: t.portfolio, icon: <ShoppingCartIcon /> },
+  { segment: 'analysis', title: t.analysis, icon: <BarChartIcon /> },
   { segment: 'journal', title: t.tradeJournal, icon: <LayersIcon /> },
   { segment: 'financial-reports', title: t.financialReports, icon: <LayersIcon /> },
   { segment: 'user-center', title: t.userCenter, icon: <AccountCircleIcon /> },
@@ -145,128 +58,114 @@ const drawerWidth = 240;
 
 export default function DashboardLayoutBasic() {
   const [open, setOpen] = React.useState(true);
-  const [colorScheme, setColorScheme] = React.useState<ColorScheme>('default');
   const [language, setLanguage] = React.useState<Language>('en');
   const [openSubMenu, setOpenSubMenu] = React.useState<string | null>(null);
-  const [themeMenuAnchor, setThemeMenuAnchor] = React.useState<null | HTMLElement>(null);
   const [languageMenuAnchor, setLanguageMenuAnchor] = React.useState<null | HTMLElement>(null);
 
-  // 获取翻译
+  // Use global theme
+  const { currentScheme } = useCustomTheme();
+
+  // Get translations
   const t = getTranslations(language);
-  // 获取配色方案名称
-  const colorSchemeNames = getColorSchemeNames(t);
-  // 获取导航菜单
+  // Get navigation menu
   const NAVIGATION = getNavigation(t);
   
-  const theme = getTheme(colorScheme);
-  const themeMenuOpen = Boolean(themeMenuAnchor);
   const languageMenuOpen = Boolean(languageMenuAnchor);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  // 打开主题菜单
-  const handleThemeMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setThemeMenuAnchor(event.currentTarget);
-  };
-
-  // 关闭主题菜单
-  const handleThemeMenuClose = () => {
-    setThemeMenuAnchor(null);
-  };
-
-  // 选择配色方案
-  const handleThemeSelect = (scheme: ColorScheme) => {
-    setColorScheme(scheme);
-    handleThemeMenuClose();
-  };
   
-  // 打开语言菜单
+  // Open language menu
   const handleLanguageMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setLanguageMenuAnchor(event.currentTarget);
   };
 
-  // 关闭语言菜单
+  // Close language menu
   const handleLanguageMenuClose = () => {
     setLanguageMenuAnchor(null);
   };
 
-  // 选择语言
+  // Select language
   const handleLanguageSelect = (lang: Language) => {
     setLanguage(lang);
     handleLanguageMenuClose();
   };
 
-  const handleSubMenuClick = (segment: string) => {
-    setOpenSubMenu(openSubMenu === segment ? null : segment);
+  // Toggle submenu
+  const handleSubMenuToggle = (segment: string) => {
+    if (openSubMenu === segment) {
+      setOpenSubMenu(null);
+    } else {
+      setOpenSubMenu(segment);
+    }
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box sx={{ 
+      display: 'flex',
+      minHeight: '100vh',
+      bgcolor: 'var(--color-background)',
+      color: 'var(--color-text-primary)',
+      transition: 'all var(--transition-speed) ease'
+    }}>
       <CssBaseline />
-      <Box sx={{ display: 'flex' }}>
-        {/* 顶部导航栏 */}
-        <AppBar
-          position="fixed"
-          sx={{
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-            width: '100%',
-            transition: (theme) =>
-              theme.transitions.create(['margin'], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-              }),
-          }}
-        >
-          <Toolbar>
+      
+      {/* Top app bar */}
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          transition: 'width var(--transition-speed) ease, margin var(--transition-speed) ease',
+          bgcolor: 'var(--color-paper)',
+          backdropFilter: 'blur(8px)',
+          width: open ? `calc(100% - ${drawerWidth}px)` : '100%',
+          ml: open ? `${drawerWidth}px` : 0,
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}
+      >
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
               edge="start"
-              sx={{
-                marginRight: 5,
-              }}
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={toggleDrawer}
+              sx={{ mr: 2 }}
             >
               {open ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
-            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-              {t.appName} | {language === 'en' ? 'Cryptocurrency Trading Analytics Platform' : '加密货币交易分析平台'}
-            </Typography>
             
-            {/* 版本号显示 */}
-            <Tooltip 
-              title={
-                <Box sx={{ p: 1 }}>
-                  <Typography variant="subtitle2" gutterBottom>{t.version} {VERSION} {t.versionFeatures[0].includes('新增') ? '更新内容：' : 'Updates:'}</Typography>
-                  <ul style={{ margin: 0, paddingLeft: 16 }}>
-                    {t.versionFeatures.map((feature, index) => (
-                      <li key={index}>
-                        <Typography variant="body2">{feature}</Typography>
-                      </li>
-                    ))}
-                  </ul>
-                </Box>
-              } 
-              arrow
-              placement="bottom-end"
-            >
-              <Chip
-                label={`v${VERSION}`}
-                size="small"
-                color="primary"
-                variant="outlined"
-                sx={{ 
-                  mr: 2,
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                  }
-                }}
-              />
-            </Tooltip>
+            <Breadcrumbs aria-label="Breadcrumb navigation" sx={{ color: 'var(--color-text-secondary)' }}>
+              <Link
+                underline="hover"
+                color="inherit"
+                href="/dashboard"
+              >
+                {t.dashboard}
+              </Link>
+              <Typography color="var(--color-text-primary)">{t.overview}</Typography>
+            </Breadcrumbs>
+          </Box>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Chip 
+              label={`v${VERSION}`}
+              size="small"
+              variant="outlined"
+              sx={{ 
+                borderColor: 'var(--color-primary)',
+                color: 'var(--color-text-secondary)',
+                fontWeight: 'bold',
+                mr: 2,
+                '&:hover': {
+                  borderColor: 'var(--color-primary)',
+                  opacity: 0.9
+                }
+              }}
+            />
             
-            {/* 语言选择按钮 */}
+            {/* Language selection button */}
             <Tooltip title={language === 'en' ? '切换语言 (Change Language)' : 'Change Language'} arrow>
               <IconButton
                 onClick={handleLanguageMenuOpen}
@@ -303,251 +202,298 @@ export default function DashboardLayoutBasic() {
               </MenuItem>
             </Menu>
             
-            {/* 主题设置按钮 */}
-            <Tooltip title={t.themeSettings} arrow>
-              <IconButton 
-                onClick={handleThemeMenuOpen}
+            {/* Theme settings button */}
+            <ThemeButton color="inherit" size="medium" />
+            
+            {/* User avatar */}
+            <Tooltip title={t.profile} arrow>
+              <IconButton
                 color="inherit"
-                aria-controls={themeMenuOpen ? 'theme-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={themeMenuOpen ? 'true' : undefined}
               >
-                <PaletteIcon />
+                <AccountCircleIcon />
               </IconButton>
             </Tooltip>
-            <Menu
-              id="theme-menu"
-              anchorEl={themeMenuAnchor}
-              open={themeMenuOpen}
-              onClose={handleThemeMenuClose}
-              TransitionComponent={Fade}
-              MenuListProps={{
-                'aria-labelledby': 'theme-button',
-              }}
-              PaperProps={{
-                sx: {
-                  width: 240,
-                  maxHeight: 400,
-                }
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      {/* Sidebar */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: open ? drawerWidth : 64,
+          flexShrink: 0,
+          whiteSpace: 'nowrap',
+          boxSizing: 'border-box',
+          '& .MuiDrawer-paper': {
+            width: open ? drawerWidth : 64,
+            transition: (theme) =>
+              theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+            overflowX: 'hidden',
+            backgroundColor: 'var(--color-paper)',
+            color: 'var(--color-text-primary)',
+            borderRight: '1px solid',
+            borderColor: 'divider',
+          },
+        }}
+        open={open}
+      >
+        <Toolbar sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          py: 2
+        }}>
+          <Box
+            component="img"
+            src="/images/logo.png"
+            alt="Logo"
+            sx={{ 
+              height: 40, 
+              display: 'block',
+              transition: 'all var(--transition-speed) ease',
+              filter: 'brightness(0.9) contrast(1.1)'
+            }}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = 'https://via.placeholder.com/40x40?text=H';
+            }}
+          />
+          {open && (
+            <Typography 
+              variant="h6" 
+              component="div" 
+              sx={{ 
+                ml: 2, 
+                fontWeight: 'bold',
+                fontSize: '1.2rem',
+                color: 'var(--color-primary)'
               }}
             >
-              {(Object.keys(colorSchemeNames) as ColorScheme[]).map((scheme) => (
-                <MenuItem 
-                  key={scheme} 
-                  onClick={() => handleThemeSelect(scheme)}
-                  selected={colorScheme === scheme}
+              Homunculus
+            </Typography>
+          )}
+        </Toolbar>
+        
+        <Divider />
+        
+        <List sx={{ mt: 2 }}>
+          {NAVIGATION.map((item) => (
+            <ListItem key={item.segment} disablePadding sx={{ display: 'block', mb: 0.5 }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  borderTopRightRadius: '24px',
+                  borderBottomRightRadius: '24px',
+                  mx: 1,
+                  px: 2.5,
+                  '&:hover': {
+                    bgcolor: 'rgba(var(--color-primary-rgb), 0.1)',
+                  },
+                  ...(item.segment === 'dashboard' && {
+                    bgcolor: 'var(--color-primary)',
+                    color: '#fff',
+                    '&:hover': {
+                      bgcolor: 'var(--color-primary)',
+                      opacity: 0.9,
+                    },
+                  }),
+                }}
+                onClick={() => handleSubMenuToggle(item.segment)}
+              >
+                <ListItemIcon
                   sx={{
-                    borderLeft: colorScheme === scheme
-                      ? `4px solid ${theme.palette.primary.main}` 
-                      : '4px solid transparent',
+                    minWidth: 0,
+                    mr: open ? 2 : 'auto',
+                    justifyContent: 'center',
+                    color: item.segment === 'dashboard' ? '#fff' : 'var(--color-primary)',
                   }}
                 >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText 
+                  primary={item.title} 
+                  sx={{ 
+                    opacity: open ? 1 : 0,
+                    '& .MuiListItemText-primary': {
+                      fontWeight: item.segment === 'dashboard' ? 'bold' : 'normal'
+                    }
+                  }} 
+                />
+                {open && item.segment === 'analysis' && (
+                  openSubMenu === item.segment ? <ExpandLess /> : <ExpandMore />
+                )}
+              </ListItemButton>
+              
+              {/* Submenu - Analysis */}
+              {item.segment === 'analysis' && (
+                <Collapse in={openSubMenu === 'analysis' && open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton sx={{ pl: 4 }}>
+                      <ListItemIcon sx={{ color: 'var(--color-primary)' }}>
+                        <BarChartIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={t.performance} />
+                    </ListItemButton>
+                    <ListItemButton sx={{ pl: 4 }}>
+                      <ListItemIcon sx={{ color: 'var(--color-primary)' }}>
+                        <Timeline />
+                      </ListItemIcon>
+                      <ListItemText primary={t.trends} />
+                    </ListItemButton>
+                  </List>
+                </Collapse>
+              )}
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+
+      {/* Main content */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: '100%',
+          transition: 'margin var(--transition-speed) ease',
+          mt: '64px',
+          bgcolor: 'var(--color-background)',
+        }}
+      >
+        {/* Dashboard content */}
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper 
+              elevation={0}
+              sx={{ 
+                p: 3, 
+                borderRadius: 'var(--border-radius)',
+                bgcolor: 'var(--color-paper)',
+                color: 'var(--color-text-primary)',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+                border: '1px solid',
+                borderColor: 'divider',
+              }}
+            >
+              <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
+                {t.welcomeBack}
+              </Typography>
+              <Typography variant="body1" color="var(--color-text-secondary)">
+                {t.welcomeMessage}
+              </Typography>
+              <Box sx={{ mt: 2 }}>
+                <Button 
+                  variant="contained" 
+                  sx={{ 
+                    mr: 2, 
+                    bgcolor: 'var(--color-primary)',
+                    '&:hover': {
+                      bgcolor: 'var(--color-primary)',
+                      opacity: 0.9,
+                    }
+                  }}
+                >
+                  {t.newTrade}
+                </Button>
+                <Button 
+                  variant="outlined"
+                  sx={{
+                    borderColor: 'var(--color-primary)',
+                    color: 'var(--color-primary)',
+                    '&:hover': {
+                      borderColor: 'var(--color-primary)',
+                      bgcolor: 'rgba(var(--color-primary-rgb), 0.05)',
+                    }
+                  }}
+                >
+                  {t.viewReport}
+                </Button>
+              </Box>
+            </Paper>
+          </Grid>
+          
+          {/* Example cards */}
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: 140,
+                  borderRadius: 'var(--border-radius)',
+                  bgcolor: 'var(--color-paper)',
+                  color: 'var(--color-text-primary)',
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  transition: 'transform var(--transition-speed) ease',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.1)',
+                  }
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                  <Typography 
+                    component="h2" 
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    color="var(--color-text-secondary)"
+                  >
+                    {index === 0 && t.totalValue}
+                    {index === 1 && t.profitLoss}
+                    {index === 2 && t.winRate}
+                    {index === 3 && t.activeTrades}
+                  </Typography>
                   <Box 
                     sx={{ 
-                      width: 16, 
-                      height: 16, 
+                      width: 36, 
+                      height: 36, 
                       borderRadius: '50%', 
-                      mr: 1,
-                      background: scheme === 'default' 
-                        ? '#1976d2' 
-                        : scheme === 'deepOcean' 
-                          ? '#2c698d' 
-                          : scheme === 'earthForest' 
-                            ? '#656D4A' 
-                            : '#005F73',
-                      border: '2px solid #333',
-                      boxShadow: '0 0 0 1px rgba(255,255,255,0.1)'
-                    }} 
-                  />
-                  {colorSchemeNames[scheme]}
-                </MenuItem>
-              ))}
-            </Menu>
-          </Toolbar>
-        </AppBar>
-
-        {/* 侧边栏 */}
-        <Drawer
-          variant="permanent"
-          sx={{
-            width: open ? drawerWidth : 64,
-            flexShrink: 0,
-            whiteSpace: 'nowrap',
-            boxSizing: 'border-box',
-            '& .MuiDrawer-paper': {
-              width: open ? drawerWidth : 64,
-              transition: (theme) =>
-                theme.transitions.create('width', {
-                  easing: theme.transitions.easing.sharp,
-                  duration: theme.transitions.duration.enteringScreen,
-                }),
-              overflowX: 'hidden',
-              boxSizing: 'border-box',
-              marginTop: 0,
-              height: 'calc(100% - 64px)',
-              top: 64,
-            },
-          }}
-        >
-          <List sx={{ mt: 1 }}>
-            {NAVIGATION.map((item, index) => {
-              // 分隔线
-              if (item.kind === 'divider') return <Divider key={index} />;
-              
-              // 标题
-              if (item.kind === 'header') return (
-                <ListItem key={index} sx={{ display: open ? 'block' : 'none' }}>
-                  <Typography
-                    variant="overline"
-                    color="text.secondary"
-                    sx={{ fontWeight: 'bold', ml: 2 }}
-                  >
-                    {item.title}
-                  </Typography>
-                </ListItem>
-              );
-              
-              // 有子菜单的项目
-              if (item.children) {
-                const isSubMenuOpen = openSubMenu === item.segment;
-                return (
-                  <React.Fragment key={index}>
-                    <ListItem disablePadding>
-                      <ListItemButton
-                        onClick={() => handleSubMenuClick(item.segment)}
-                        sx={{
-                          minHeight: 48,
-                          justifyContent: open ? 'initial' : 'center',
-                          px: 2.5,
-                        }}
-                      >
-                        <ListItemIcon
-                          sx={{
-                            minWidth: 0,
-                            mr: open ? 3 : 'auto',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          {item.icon}
-                        </ListItemIcon>
-                        <ListItemText 
-                          primary={item.title} 
-                          sx={{ opacity: open ? 1 : 0 }}
-                        />
-                        {open && (isSubMenuOpen ? <ExpandLess /> : <ExpandMore />)}
-                      </ListItemButton>
-                    </ListItem>
-                    <Collapse in={open && isSubMenuOpen} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
-                        {item.children.map((child, childIndex) => (
-                          <ListItemButton
-                            key={childIndex}
-                            sx={{ pl: 4 }}
-                          >
-                            <ListItemIcon>{child.icon}</ListItemIcon>
-                            <ListItemText primary={child.title} />
-                          </ListItemButton>
-                        ))}
-                      </List>
-                    </Collapse>
-                  </React.Fragment>
-                );
-              }
-              
-              // 普通菜单项
-              return (
-                <ListItem key={index} disablePadding>
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? 'initial' : 'center',
-                      px: 2.5,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      bgcolor: 'var(--color-primary)',
+                      opacity: 0.8
                     }}
                   >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary={item.title} 
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
-        </Drawer>
-
-        {/* 主内容区域 */}
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Toolbar /> {/* 这个空的 Toolbar 用于在顶部 AppBar 下方创建空间 */}
-          <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
-            <Link underline="hover" color="inherit" href="/">
-              {t.home}
-            </Link>
-            <Typography color="text.primary">{t.dashboard}</Typography>
-          </Breadcrumbs>
-          
-          {/* 仪表盘内容 */}
-          <Grid container spacing={2}>
-            {/* 顶部卡片 */}
-            <Grid item xs={12} md={6} lg={3}>
-              <Box sx={{ height: 100, bgcolor: 'background.paper', borderRadius: 1, p: 2, boxShadow: 1 }}>
-                <Typography variant="h6">{t.totalAssets}</Typography>
-                <Typography variant="h4">$12,345.67</Typography>
-              </Box>
+                    {index === 0 && <DashboardIcon fontSize="small" sx={{ color: '#fff' }} />}
+                    {index === 1 && <BarChartIcon fontSize="small" sx={{ color: '#fff' }} />}
+                    {index === 2 && <Timeline fontSize="small" sx={{ color: '#fff' }} />}
+                    {index === 3 && <ShoppingCartIcon fontSize="small" sx={{ color: '#fff' }} />}
+                  </Box>
+                </Box>
+                <Typography component="p" variant="h5" fontWeight="bold">
+                  {index === 0 && '$87,324.56'}
+                  {index === 1 && '+$12,493.82'}
+                  {index === 2 && '68.5%'}
+                  {index === 3 && '12'}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 'auto' }}>
+                  <Typography 
+                    variant="body2"
+                    sx={{ 
+                      color: index === 1 ? 'success.main' : 'var(--color-text-secondary)',
+                      fontWeight: 'medium'
+                    }}
+                  >
+                    {index === 0 && '+2.3% vs last week'}
+                    {index === 1 && '+5.7% ($673.12)'}
+                    {index === 2 && '+1.2% vs last month'}
+                    {index === 3 && '3 pending orders'}
+                  </Typography>
+                </Box>
+              </Paper>
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <Box sx={{ height: 100, bgcolor: 'background.paper', borderRadius: 1, p: 2, boxShadow: 1 }}>
-                <Typography variant="h6">{t.todayProfitLoss}</Typography>
-                <Typography variant="h4" color="success.main">+$123.45</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <Box sx={{ height: 100, bgcolor: 'background.paper', borderRadius: 1, p: 2, boxShadow: 1 }}>
-                <Typography variant="h6">{t.totalTrades}</Typography>
-                <Typography variant="h4">1,234</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <Box sx={{ height: 100, bgcolor: 'background.paper', borderRadius: 1, p: 2, boxShadow: 1 }}>
-                <Typography variant="h6">{t.winRate}</Typography>
-                <Typography variant="h4">65.4%</Typography>
-              </Box>
-            </Grid>
-            
-            {/* 图表区域 */}
-            <Grid item xs={12} lg={8}>
-              <Box sx={{ height: 350, bgcolor: 'background.paper', borderRadius: 1, p: 2, boxShadow: 1 }}>
-                <Typography variant="h6" gutterBottom>{t.profitTrend}</Typography>
-                <Box sx={{ height: 300, bgcolor: 'action.hover', borderRadius: 1 }} />
-              </Box>
-            </Grid>
-            
-            {/* 侧边信息 */}
-            <Grid item xs={12} lg={4}>
-              <Box sx={{ height: 350, bgcolor: 'background.paper', borderRadius: 1, p: 2, boxShadow: 1 }}>
-                <Typography variant="h6" gutterBottom>{t.recentTrades}</Typography>
-                <Box sx={{ height: 300, bgcolor: 'action.hover', borderRadius: 1 }} />
-              </Box>
-            </Grid>
-            
-            {/* 底部区域 */}
-            <Grid item xs={12}>
-              <Box sx={{ height: 200, bgcolor: 'background.paper', borderRadius: 1, p: 2, boxShadow: 1 }}>
-                <Typography variant="h6" gutterBottom>{t.tradeDistribution}</Typography>
-                <Box sx={{ height: 150, bgcolor: 'action.hover', borderRadius: 1 }} />
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
+          ))}
+        </Grid>
       </Box>
-    </ThemeProvider>
+    </Box>
   );
 } 

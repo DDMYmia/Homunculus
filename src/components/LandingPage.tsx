@@ -10,7 +10,7 @@ import {
   Card, 
   CardContent, 
   CardMedia,
-  useTheme,
+  useTheme as useMuiTheme,
   useMediaQuery,
   AppBar,
   Toolbar,
@@ -21,7 +21,8 @@ import {
   Fade,
   Badge,
   Chip,
-  Divider
+  Divider,
+  Paper
 } from '@mui/material';
 import { 
   BarChart as BarChartIcon, 
@@ -31,17 +32,51 @@ import {
   Menu as MenuIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
   Palette as PaletteIcon,
-  Language as LanguageIcon
+  Language as LanguageIcon,
+  Facebook as FacebookIcon,
+  Twitter as TwitterIcon,
+  Instagram as InstagramIcon,
+  LinkedIn as LinkedInIcon,
+  YouTube as YouTubeIcon,
+  Security as SecurityIcon,
+  Speed as SpeedIcon,
+  Devices as DevicesIcon,
+  Computer as ComputerIcon,
+  Apple as AppleIcon,
+  Android as AndroidIcon,
+  Check as CheckIcon
 } from '@mui/icons-material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme, Theme } from '@mui/material/styles';
 import Link from 'next/link';
 import { Language, Translations, getTranslations } from '../utils/i18n';
+import { useTheme as useCustomTheme } from '@/styles/themes/ThemeProvider';
+import { mapNewSchemeToLegacy, LegacyColorScheme } from '@/styles/themes/themeAdapter';
+import ThemeButton from './ThemeButton';
+
+// 扩展主题类型添加自定义属性
+declare module '@mui/material/styles' {
+  interface Theme {
+    customProps: {
+      heroGradient: string;
+      buttonGradient: string;
+      buttonHoverGradient: string;
+    };
+  }
+  // 允许在 createTheme 中使用自定义配置
+  interface ThemeOptions {
+    customProps?: {
+      heroGradient?: string;
+      buttonGradient?: string;
+      buttonHoverGradient?: string;
+    };
+  }
+}
 
 // 配色方案类型
 type ColorScheme = 'default' | 'deepOcean' | 'earthForest' | 'earth';
 
-// 版本信息
-const VERSION = '0.1.0';
+// Version information
+const VERSION = '0.1.1';
 
 // 创建主题
 const getTheme = (colorScheme: ColorScheme = 'default') => {
@@ -99,7 +134,7 @@ const getTheme = (colorScheme: ColorScheme = 'default') => {
     heroGradient = 'radial-gradient(circle at 50% 50%, #005F73 0%, #001219 50%, #9B2226 100%)';
   }
 
-  return createTheme({
+  const theme = createTheme({
     palette: {
       mode: 'dark',
       primary: {
@@ -203,13 +238,17 @@ const getTheme = (colorScheme: ColorScheme = 'default') => {
         },
       },
     },
-    // 添加自定义属性
-    customProps: {
-      heroGradient: heroGradient,
-      buttonGradient: buttonGradient,
-      buttonHoverGradient: buttonHoverGradient,
-    },
   });
+
+  // 添加自定义属性
+  return {
+    ...theme,
+    customProps: {
+      heroGradient,
+      buttonGradient,
+      buttonHoverGradient,
+    }
+  };
 };
 
 // 配色方案名称映射
@@ -248,21 +287,103 @@ const getFeatures = (t: Translations) => [
   },
 ];
 
+// 添加足部导航链接
+const getFooterLinks = (t: Translations) => {
+  return [
+    {
+      title: t.companyTitle || '公司',
+      links: [
+        { label: t.aboutUs || '关于我们', href: '/about' },
+        { label: t.contactUs || '联系方式', href: '/contact' },
+        { label: t.newsCenter || '新闻中心', href: '/news' },
+        { label: t.careers || '加入我们', href: '/careers' }
+      ]
+    },
+    {
+      title: t.productTitle || '产品',
+      links: [
+        { label: t.changelog || '更新日志', href: '/changelog' },
+        { label: t.roadmap || '路线图', href: '/roadmap' },
+        { label: t.apiDocs || 'API 文档', href: '/api' },
+        { label: t.helpCenter || '帮助中心', href: '/help' }
+      ]
+    },
+    {
+      title: t.communityTitle || '社区',
+      links: [
+        { label: t.community || '社区', href: '/community' },
+        { label: t.devForum || '开发者论坛', href: '/forum' },
+        { label: t.discord || 'Discord', href: '/discord' },
+        { label: t.techBlog || '技术博客', href: '/blog' }
+      ]
+    },
+    {
+      title: t.legalTitle || '法律',
+      links: [
+        { label: t.legal || '法律', href: '/legal' },
+        { label: t.terms || '服务条款', href: '/terms' },
+        { label: t.privacy || '隐私政策', href: '/privacy' },
+        { label: t.disclaimer || '免责声明', href: '/disclaimer' }
+      ]
+    }
+  ];
+};
+
+// 添加社交媒体链接
+const getSocialLinks = (t: Translations) => {
+  return [
+    { label: 'Facebook', icon: <FacebookIcon />, href: '#' },
+    { label: 'Twitter', icon: <TwitterIcon />, href: '#' },
+    { label: 'Instagram', icon: <InstagramIcon />, href: '#' },
+    { label: 'LinkedIn', icon: <LinkedInIcon />, href: '#' },
+    { label: 'YouTube', icon: <YouTubeIcon />, href: '#' }
+  ];
+};
+
+// 添加功能展示数据
+const getShowcaseItems = (t: Translations) => {
+  return [
+    {
+      title: t.showcaseTitle1 || '交易分析功能',
+      description: t.showcaseDesc1 || '强大的交易数据分析工具，帮助您洞察市场趋势和模式',
+      icon: <BarChartIcon sx={{ fontSize: 60, color: 'primary.main' }} />
+    },
+    {
+      title: t.showcaseTitle2 || '实时数据演示',
+      description: t.showcaseDesc2 || '提供实时市场数据，确保您的决策基于最新信息',
+      icon: <SpeedIcon sx={{ fontSize: 60, color: 'primary.main' }} />
+    },
+    {
+      title: t.showcaseTitle3 || '用户见证',
+      description: t.showcaseDesc3 || '来自全球交易者的真实体验和成功案例分享',
+      icon: <DevicesIcon sx={{ fontSize: 60, color: 'primary.main' }} />
+    },
+    {
+      title: t.showcaseTitle4 || '数据安全保障',
+      description: t.showcaseDesc4 || '采用最高级别的加密技术，确保您的交易数据安全',
+      icon: <SecurityIcon sx={{ fontSize: 60, color: 'primary.main' }} />
+    }
+  ];
+};
+
 export default function LandingPage() {
-  const [colorScheme, setColorScheme] = useState<ColorScheme>('default');
-  const [language, setLanguage] = useState<Language>('en');
   const [scrolled, setScrolled] = useState(false);
+  const [language, setLanguage] = useState<Language>('zh');
   const [themeMenuAnchor, setThemeMenuAnchor] = useState<null | HTMLElement>(null);
   const [languageMenuAnchor, setLanguageMenuAnchor] = useState<null | HTMLElement>(null);
   
+  // 使用我们的全局主题
+  const customTheme = useCustomTheme();
+  
+  // 映射新主题ID到旧主题类型
+  const legacyColorScheme = mapNewSchemeToLegacy(customTheme.currentScheme.id);
+  
   // 获取翻译
   const t = getTranslations(language);
-  // 获取配色方案名称
-  const colorSchemeNames = getColorSchemeNames(t);
-  // 获取特点数据
-  const features = getFeatures(t);
   
-  const theme = getTheme(colorScheme);
+  // 创建旧版主题
+  const theme = createTheme(getTheme(legacyColorScheme));
+  
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const themeMenuOpen = Boolean(themeMenuAnchor);
   const languageMenuOpen = Boolean(languageMenuAnchor);
@@ -291,9 +412,15 @@ export default function LandingPage() {
     setThemeMenuAnchor(null);
   };
 
-  // 选择配色方案
-  const handleThemeSelect = (scheme: ColorScheme) => {
-    setColorScheme(scheme);
+  // 选择配色方案 - 现在使用我们的全局主题系统
+  const handleThemeSelect = (scheme: LegacyColorScheme) => {
+    // 映射旧的配色方案到新的主题ID
+    const newThemeId = scheme === 'default' ? 'grayscale' : 
+                       scheme === 'deepOcean' ? 'neonCyberpunk' :
+                       scheme === 'earthForest' ? 'earthPulse' : 'estonian';
+    
+    // 使用全局主题的setColorScheme
+    customTheme.setColorScheme(newThemeId);
     handleThemeMenuClose();
   };
   
@@ -322,7 +449,12 @@ export default function LandingPage() {
   };
 
   // 获取自定义属性
-  const customProps = theme.customProps as any;
+  const customProps = theme.customProps;
+
+  // 获取页脚链接
+  const footerLinks = getFooterLinks(t);
+  const socialLinks = getSocialLinks(t);
+  const showcaseItems = getShowcaseItems(t);
 
   return (
     <ThemeProvider theme={theme}>
@@ -419,65 +551,7 @@ export default function LandingPage() {
             </Menu>
             
             {/* 主题设置按钮 */}
-            <Tooltip title={t.themeSettings} arrow>
-              <IconButton
-                onClick={handleThemeMenuOpen}
-                color="inherit"
-                aria-controls={themeMenuOpen ? 'theme-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={themeMenuOpen ? 'true' : undefined}
-              >
-                <PaletteIcon />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              id="theme-menu"
-              anchorEl={themeMenuAnchor}
-              open={themeMenuOpen}
-              onClose={handleThemeMenuClose}
-              TransitionComponent={Fade}
-              MenuListProps={{
-                'aria-labelledby': 'theme-button',
-              }}
-              PaperProps={{
-                sx: {
-                  width: 240,
-                  maxHeight: 400,
-                }
-              }}
-            >
-              {(Object.keys(colorSchemeNames) as ColorScheme[]).map((scheme) => (
-                <MenuItem 
-                  key={scheme} 
-                  onClick={() => handleThemeSelect(scheme)}
-                  selected={colorScheme === scheme}
-                  sx={{
-                    borderLeft: colorScheme === scheme
-                      ? `4px solid ${theme.palette.primary.main}` 
-                      : '4px solid transparent',
-                  }}
-                >
-                  <Box 
-                    sx={{ 
-                      width: 16, 
-                      height: 16, 
-                      borderRadius: '50%', 
-                      mr: 1,
-                      background: scheme === 'default' 
-                        ? '#1976d2' 
-                        : scheme === 'deepOcean' 
-                          ? '#2c698d' 
-                          : scheme === 'earthForest' 
-                            ? '#656D4A' 
-                            : '#005F73',
-                      border: '2px solid #333',
-                      boxShadow: '0 0 0 1px rgba(255,255,255,0.1)'
-                    }} 
-                  />
-                  {colorSchemeNames[scheme]}
-                </MenuItem>
-              ))}
-            </Menu>
+            <ThemeButton color="inherit" size="large" />
             
             {/* 进入应用按钮 */}
             <Button 
@@ -511,7 +585,7 @@ export default function LandingPage() {
             alignItems: 'center',
             textAlign: 'center',
             position: 'relative',
-            backgroundImage: customProps.heroGradient,
+            background: 'var(--color-hero-gradient)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             overflow: 'hidden',
@@ -528,111 +602,117 @@ export default function LandingPage() {
           }}
         >
           <Container maxWidth="md" sx={{ position: 'relative', zIndex: 2 }}>
-            <Typography 
-              variant="h1" 
-              component="h1" 
-              sx={{ 
+            <Typography
+              variant="h2"
+              component="h1"
+              sx={{
+                fontWeight: 'bold',
                 mb: 2,
-                background: customProps.buttonGradient,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                textShadow: '0 0 20px rgba(144, 202, 249, 0.5)',
+                color: '#fff',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
+                fontSize: { xs: '2.5rem', md: '3.5rem' },
+                animation: 'fadeIn 1s ease-out',
               }}
             >
               {t.heroTitle}
             </Typography>
-            <Typography 
-              variant="h3" 
-              component="h2" 
-              sx={{ 
+            <Typography
+              variant="h5"
+              sx={{
                 mb: 4,
-                color: '#fff',
+                color: 'rgba(255, 255, 255, 0.9)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)',
+                fontWeight: 'normal',
+                maxWidth: '800px',
+                mx: 'auto',
+                animation: 'fadeIn 1s ease-out 0.3s',
+                animationFillMode: 'both',
               }}
             >
               {t.heroSubtitle}
             </Typography>
-            <Typography 
-              variant="subtitle1" 
-              sx={{ 
-                mb: 6, 
-                maxWidth: '800px', 
-                mx: 'auto',
-                color: 'rgba(255, 255, 255, 0.8)',
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                justifyContent: 'center',
+                gap: 2,
+                animation: 'fadeIn 1s ease-out 0.6s',
+                animationFillMode: 'both',
               }}
             >
-              {t.heroDescription}
-            </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 size="large"
                 component={Link}
                 href="/dashboard"
-                sx={{ 
-                  px: 4, 
+                sx={{
                   py: 1.5,
+                  px: 4,
                   fontSize: '1.1rem',
-                  background: customProps.buttonGradient,
+                  fontWeight: 'bold',
+                  backgroundColor: 'var(--color-primary)',
+                  backgroundImage: 'var(--color-button-gradient)',
+                  transition: 'all var(--transition-speed) ease',
+                  borderRadius: 'var(--border-radius)',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)',
                   '&:hover': {
-                    background: customProps.buttonHoverGradient,
-                  }
+                    backgroundImage: 'var(--color-button-hover-gradient)',
+                    transform: 'translateY(-3px)',
+                    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.4)',
+                  },
                 }}
               >
                 {t.getStarted}
               </Button>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 size="large"
-                sx={{ 
-                  px: 4, 
+                component={Link}
+                href="#features"
+                sx={{
                   py: 1.5,
+                  px: 4,
                   fontSize: '1.1rem',
-                  borderColor: theme.palette.primary.main,
-                  color: theme.palette.primary.main,
+                  fontWeight: 'bold',
+                  borderColor: '#fff',
+                  color: '#fff',
+                  borderWidth: 2,
+                  transition: 'all var(--transition-speed) ease',
+                  borderRadius: 'var(--border-radius)',
+                  backdropFilter: 'blur(4px)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   '&:hover': {
-                    borderColor: theme.palette.primary.dark,
-                    backgroundColor: 'rgba(25, 118, 210, 0.04)',
-                  }
+                    borderColor: '#fff',
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    transform: 'translateY(-3px)',
+                  },
                 }}
-                onClick={scrollToFeatures}
               >
                 {t.learnMore}
               </Button>
             </Box>
           </Container>
-          <Box 
-            sx={{ 
-              position: 'absolute', 
-              bottom: 30, 
-              left: '50%', 
-              transform: 'translateX(-50%)',
-              animation: 'bounce 2s infinite',
-              zIndex: 2,
-              '@keyframes bounce': {
-                '0%, 20%, 50%, 80%, 100%': {
-                  transform: 'translateY(0) translateX(-50%)',
-                },
-                '40%': {
-                  transform: 'translateY(-20px) translateX(-50%)',
-                },
-                '60%': {
-                  transform: 'translateY(-10px) translateX(-50%)',
-                },
-              },
+
+          {/* 波浪效果 */}
+          <Box
+            component="svg"
+            viewBox="0 0 1440 320"
+            preserveAspectRatio="none"
+            sx={{
+              position: 'absolute',
+              bottom: -1,
+              left: 0,
+              width: '100%',
+              height: '10vw',
+              minHeight: '100px',
+              zIndex: 1,
+              fill: 'var(--color-background)',
             }}
           >
-            <IconButton 
-              color="inherit" 
-              onClick={scrollToFeatures}
-              sx={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                }
-              }}
-            >
-              <KeyboardArrowDownIcon fontSize="large" />
-            </IconButton>
+            <path
+              d="M0,192L48,197.3C96,203,192,213,288,218.7C384,224,480,224,576,202.7C672,181,768,139,864,133.3C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            ></path>
           </Box>
         </Box>
 
@@ -667,7 +747,7 @@ export default function LandingPage() {
               {t.featuresSubtitle}
             </Typography>
             <Grid container spacing={4}>
-              {features.map((feature, index) => (
+              {getFeatures(t).map((feature, index) => (
                 <Grid item xs={12} sm={6} md={3} key={index}>
                   <Card 
                     sx={{ 
@@ -707,6 +787,198 @@ export default function LandingPage() {
                   </Card>
                 </Grid>
               ))}
+            </Grid>
+          </Container>
+        </Box>
+
+        {/* 功能展示 */}
+        <Box 
+          id="showcase" 
+          sx={{ 
+            py: 10, 
+            px: 2,
+            background: 'linear-gradient(180deg, #1e1e1e 0%, #232323 100%)',
+          }}
+        >
+          <Container maxWidth="lg">
+            <Typography 
+              variant="h2" 
+              component="h2" 
+              align="center" 
+              sx={{ 
+                mb: 2,
+                background: customProps.buttonGradient,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              {t.showcaseTitle || '功能展示'}
+            </Typography>
+            <Typography 
+              variant="subtitle1" 
+              align="center" 
+              sx={{ mb: 6, maxWidth: '800px', mx: 'auto' }}
+            >
+              {t.showcaseSubtitle || '探索 Homunculus 的强大功能和特性'}
+            </Typography>
+
+            <Grid container spacing={4}>
+              {getShowcaseItems(t).map((item, index) => (
+                <Grid item xs={12} sm={6} md={3} key={`showcase-${index}`}>
+                  <Paper 
+                    elevation={4}
+                    sx={{ 
+                      p: 3, 
+                      height: '100%', 
+                      display: 'flex', 
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      transition: 'transform 0.3s',
+                      '&:hover': {
+                        transform: 'translateY(-10px)',
+                      }
+                    }}
+                  >
+                    <Box sx={{ mb: 2 }}>
+                      {item.icon}
+                    </Box>
+                    <Typography variant="h5" component="h3" gutterBottom>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {item.description}
+                    </Typography>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+        </Box>
+
+        {/* 应用下载区域(未启用) */}
+        <Box 
+          sx={{ 
+            py: 10, 
+            px: 2,
+            background: 'linear-gradient(180deg, #232323 0%, #1a1a1a 100%)',
+          }}
+        >
+          <Container maxWidth="lg">
+            <Typography 
+              variant="h2" 
+              component="h2" 
+              align="center" 
+              sx={{ 
+                mb: 2,
+                background: customProps.buttonGradient,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              {t.downloadTitle || '下载 Homunculus 应用'}
+            </Typography>
+            <Typography 
+              variant="subtitle1" 
+              align="center" 
+              sx={{ mb: 6, maxWidth: '800px', mx: 'auto' }}
+            >
+              {t.downloadSubtitle || '应用下载功能即将推出，敬请期待。您将能够在各种设备上使用我们的交易分析工具。'}
+            </Typography>
+
+            <Grid container spacing={4} justifyContent="center">
+              {/* Windows 客户端 */}
+              <Grid item xs={12} sm={6} md={4}>
+                <Paper 
+                  elevation={3}
+                  sx={{ 
+                    p: 4, 
+                    height: '100%', 
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                  }}
+                >
+                  <ComputerIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    {t.windowsClient || 'Windows 客户端'}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                    {t.windowsDesc || '适用于 Windows 10 及以上版本'}
+                  </Typography>
+                  <Button 
+                    variant="contained" 
+                    disabled
+                    fullWidth
+                    sx={{ mt: 'auto' }}
+                  >
+                    {t.comingSoon || '即将推出'}
+                  </Button>
+                </Paper>
+              </Grid>
+
+              {/* iOS App */}
+              <Grid item xs={12} sm={6} md={4}>
+                <Paper 
+                  elevation={3}
+                  sx={{ 
+                    p: 4, 
+                    height: '100%', 
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                  }}
+                >
+                  <AppleIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    {t.iosApp || 'iOS App'}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                    {t.iosDesc || '适用于 iPhone 和 iPad'}
+                  </Typography>
+                  <Button 
+                    variant="contained" 
+                    disabled
+                    fullWidth
+                    sx={{ mt: 'auto' }}
+                  >
+                    {t.comingToAppStore || '即将上架 App Store'}
+                  </Button>
+                </Paper>
+              </Grid>
+
+              {/* Android App */}
+              <Grid item xs={12} sm={6} md={4}>
+                <Paper 
+                  elevation={3}
+                  sx={{ 
+                    p: 4, 
+                    height: '100%', 
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                  }}
+                >
+                  <AndroidIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    {t.androidApp || 'Android App'}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                    {t.androidDesc || '适用于所有 Android 设备'}
+                  </Typography>
+                  <Button 
+                    variant="contained" 
+                    disabled
+                    fullWidth
+                    sx={{ mt: 'auto' }}
+                  >
+                    {t.comingToGooglePlay || '即将上架 Google Play'}
+                  </Button>
+                </Paper>
+              </Grid>
             </Grid>
           </Container>
         </Box>
@@ -780,18 +1052,68 @@ export default function LandingPage() {
           </Container>
         </Box>
 
-        {/* 页脚 */}
+        {/* 增强版页脚 */}
         <Box 
           sx={{ 
-            py: 4, 
+            py: 8, 
+            px: 2,
             bgcolor: '#0a0a0a',
             color: 'text.secondary',
           }}
         >
-          <Container>
-            <Typography variant="body2" align="center">
-              {t.footerText}
-            </Typography>
+          <Container maxWidth="lg">
+            <Grid container spacing={4}>
+              {footerLinks.map((section, index) => (
+                <Grid item xs={12} sm={6} md={3} key={`footer-section-${index}`}>
+                  <Typography variant="h6" color="white" gutterBottom>
+                    {section.title}
+                  </Typography>
+                  <Box component="ul" sx={{ p: 0, m: 0, listStyle: 'none' }}>
+                    {section.links.map((link, linkIndex) => (
+                      <Box component="li" key={`footer-link-${linkIndex}`} sx={{ mb: 1 }}>
+                        <Link 
+                          href={link.href} 
+                          style={{ 
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            textDecoration: 'none',
+                          }}
+                          className="footer-link"
+                        >
+                          {link.label}
+                        </Link>
+                      </Box>
+                    ))}
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+
+            {/* 社交媒体链接 */}
+            <Box sx={{ mt: 6, pt: 3, borderTop: 1, borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+              <Grid container justifyContent="center" spacing={2}>
+                {socialLinks.map((social, index) => (
+                  <Grid item key={`social-${index}`}>
+                    <IconButton 
+                      component="a" 
+                      href={social.href}
+                      target="_blank"
+                      aria-label={social.label}
+                      sx={{ 
+                        color: 'text.secondary',
+                        '&:hover': {
+                          color: 'primary.main'
+                        }
+                      }}
+                    >
+                      {social.icon}
+                    </IconButton>
+                  </Grid>
+                ))}
+              </Grid>
+              <Typography variant="body2" align="center" sx={{ mt: 3 }}>
+                {t.footerText}
+              </Typography>
+            </Box>
           </Container>
         </Box>
       </Box>
